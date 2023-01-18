@@ -1,4 +1,4 @@
-Este projeto é criado como projeto intercalar do CTeSP - Aplicacoes moveis
+Este projeto é criado como projeto interdesciplinar do CTeSP - Aplicacoes moveis
 
 
 
