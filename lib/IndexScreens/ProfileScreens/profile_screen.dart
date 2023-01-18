@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/backend/services/auth_services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../../backend/providers/user_provider.dart';
@@ -12,6 +13,10 @@ import 'Settings/settings_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
+
+  void signOutUser(BuildContext context) {
+    AuthService().signOut(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +37,9 @@ class ProfileScreen extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
-        const Text(
-          "Username",
-          style: TextStyle(
+         Text(
+          user.email,
+          style: const TextStyle(
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.normal),
         ),
         const SizedBox(height: 4),
@@ -179,16 +184,7 @@ class ProfileScreen extends StatelessWidget {
                       backgroundColor: Colors.white,
                       elevation: 1.5,
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return const SettingsScreen();
-                          },
-                        ),
-                      );
-                    },
+                    onPressed: () => signOutUser(context),
                     child: const ProfileListItem(
                       icon: LineAwesomeIcons.alternate_sign_out,
                       text: "Logout",

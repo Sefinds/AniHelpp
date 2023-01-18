@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../backend/providers/user_provider.dart';
 import '../../../constants.dart';
-import '../profile_screen.dart';
+import 'package:provider/provider.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -14,20 +15,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 1,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: kPrimaryColor,
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         title: const Text(
           "Edit Profile",
           style: TextStyle(
@@ -98,9 +91,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               ),
               const SizedBox(height: 35),
-              buildTextField("Full Name", "Username", false),
-              buildTextField("E-mail", "emaisuser@gmail.com", false),
-              buildTextField("Password", "********", true),
+              buildTextField("Full Name", user.name, false),
+              buildTextField("E-mail", user.email, false),
+              buildTextField("Password", "**********", true),
               buildTextField("Location", "Porto, Portugal", false),
               const SizedBox(height: 35),
               Row(
@@ -118,7 +111,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           letterSpacing: 2.2,
                           color: kPrimaryColor),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
                   ),
 
                   ElevatedButton(

@@ -52,7 +52,7 @@ class _DonateState extends State<Donate> {
                   style: TextStyle(fontSize: 20),
                 ),
                 Text(
-                  "Animal cruelty!",
+                  "Animals!",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 )
               ],

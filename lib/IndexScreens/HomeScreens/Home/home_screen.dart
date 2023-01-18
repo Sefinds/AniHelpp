@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_auth/backend/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:provider/provider.dart';
 import '../../../components/loading.dart';
 import '../../../constants.dart';
 import 'package:http/http.dart' as http;
@@ -64,7 +67,7 @@ final List<Widget> imageSliders = imgList
                           Row(
                             children: [
                               LinearPercentIndicator(
-                                barRadius: Radius.circular(16),
+                                barRadius: const Radius.circular(16),
                                 lineHeight: 7,
                                 width: 180,
                                 percent: 0.5,
@@ -123,6 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
+
     return DefaultTabController(
       length: 5,
       child: Scaffold(
@@ -296,12 +301,12 @@ class _HomeScreenState extends State<HomeScreen> {
     itemBuilder: (context, index) {
       New newse = news[index];
 
-      return Container(
+      return SizedBox(
         height: 150,
         child: Card(
               child: ListTile(
                 visualDensity: VisualDensity(vertical: 4),
-                leading: Container(
+                leading: SizedBox(
                   width: 120,
                   height: 180,
                   child: SizedBox(

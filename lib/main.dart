@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/WelcomeScreens/Welcome/welcome_screen.dart';
 import 'package:flutter_auth/backend/providers/user_provider.dart';
+import 'package:flutter_auth/backend/services/auth_services.dart';
 import 'package:flutter_auth/constants.dart';
 import 'package:provider/provider.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
 import 'IndexScreens/HomeScreens/Home/home_screen.dart';
 import 'WelcomeScreens/Login/login_screen.dart';
 import 'WelcomeScreens/Signup/signup_screen.dart';
@@ -30,6 +30,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+  final AuthService authService = AuthService();
+  @override
+  void initState() {
+    super.initState();
+    authService.getUserData(context);
+  }
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -61,13 +68,13 @@ class _MyAppState extends State<MyApp> {
             ),
           )),
 
-      routes: {
+     /* routes: {
         '/': (context) => const WelcomeScreen(),
         '/signin': (context) => const LoginScreen(),
         '/signup': (context) => const SignUpScreen(),
         '/home': (context) => const HomeScreen(),
-      },
-      //home: const WelcomeScreen(),
+      },*/
+      home: Provider.of<UserProvider>(context).user.token.isEmpty ? const WelcomeScreen(): const HomeScreen(),
     );
   }
 }

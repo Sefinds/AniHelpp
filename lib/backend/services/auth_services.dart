@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_auth/WelcomeScreens/Welcome/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_auth/backend/providers/user_provider.dart';
 import 'package:flutter_auth/utils/utils.dart';
@@ -24,7 +25,7 @@ class AuthService {
           password: password,
           email: email,
           passwordConfirm: passwordConfirm,
-          token: ''
+          token: '',
           );
 
 
@@ -83,17 +84,13 @@ class AuthService {
         response: response,
         context: context,
         onSuccess: () async {
-          /* void pageRoute(String token) async {
-            SharedPreferences pref = await SharedPreferences.getInstance();
-            await pref.setString("x-auth-token", jsonEncode(token));
-          }
 
-
-          var myData = prefs.getString('x-auth-token');
-            String token = jsonDecode(myData!);
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            userProvider.setUser(response.body);
-            await prefs.setString('x-auth-token', jsonEncode(response.body)['token']);*/
+         SharedPreferences prefs = await SharedPreferences.getInstance();
+         userProvider.setUser(response.body);
+         //await prefs.setString('x-auth-token', jsonEncode(response.body)["token"]);
+        // prefs.setString("user", jsonEncode(token));
+         await prefs.setString('x-auth-token', jsonDecode(response.body)["token"]);
+         print(response.body);
 
          navigator.pushAndRemoveUntil(
               MaterialPageRoute(
@@ -102,14 +99,6 @@ class AuthService {
               (route) => false
           );
 
-        /*  void pageRoute() async {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setString("id", (response.body as User).id);
-            navigator.pushNamedAndRemoveUntil(
-                 '/home', ModalRoute.withName('/home'),
-                arguments: (response.body as User));
-          }*/
-
         },
       );
 
@@ -117,51 +106,58 @@ class AuthService {
       print(e.toString());
       showSnackBar(context, e.toString());
     }
-
   }
 
-
-
-  /*get user data
   void getUserData(
-    BuildContext context,
-  ) async {
-    try {
-      var userProvider = Provider.of<UserProvider>(context, listen: false);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString("x-auth-token");
+        BuildContext context,
+      ) async {
+        try{
+          var userProvider = Provider.of<UserProvider>(context, listen: false);
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? token = prefs.getString('x-auth-token');
 
-      if (token == null) {
-        prefs.setString("x-auth-token", "");
+          if (token == null) {
+            prefs.setString('x-auth-token', '');
+          }
+
+          var tokenRes = await http.post(
+            Uri.https('anihelp-api.onrender.com', '/tokenIsValid'),
+            headers: <String, String> {
+              'Content-Type': 'application/json; charset=UTF-8',
+              'x-auth-token': token!,
+            },
+          );
+
+        var response = jsonDecode(tokenRes.body);
+
+        if (response == true) {
+          http.Response userRes = await http.get(
+            Uri.https('anihelp-api.onrender.com', '/'),
+            headers: <String, String> {
+              'Content-Type': 'application/json; charset=UTF-8',
+              'x-auth-token': token,
+            },
+          );
+
+          userProvider.setUser(userRes.body);
+        }
+
+        } catch (e) {
+          showSnackBar(context, e.toString());
+        }
       }
 
-      var tokenRes = await http.post(
-        Uri.https('anihelp-api.onrender.com', '/tokenIsValid'),
-        headers: <String,String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token!,
-        },
-      );
-
-      var response = jsonDecode(tokenRes.body);
-
-      if (response == true) {
-        http.Response userRes = await http.get(
-          Uri.https('anihelp-api.onrender.com', '/'),
-          headers: <String,String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'x-auth-token': token,
-          },
+      void signOut(BuildContext context) async {
+        final navigator = Navigator.of(context);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('x-auth-token', '');
+        navigator.pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => const WelcomeScreen()
+            ),
+                (route) => false
         );
-
-        userProvider.setUser(userRes.body);
       }
-
-    } catch (e) {
-      showSnackBar(context, e.toString());
-    }
-
-}*/
 
 }
 

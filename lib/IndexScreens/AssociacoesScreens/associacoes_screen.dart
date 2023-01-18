@@ -64,7 +64,7 @@ class _AssociacoesScreenState extends State<AssociacoesScreen> {
         elevation: 1,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: const Text(
-          "Discover associations!",
+          "Discover associations",
           style: TextStyle(
               color: kPrimaryColor, fontSize: 25, fontWeight: FontWeight.bold, fontFamily: "SFPro"),
         ),
@@ -115,7 +115,7 @@ class _AssociacoesScreenState extends State<AssociacoesScreen> {
               )
           ),
           prefixIcon: const Icon(Icons.search),
-          hintText: 'Search Users',
+          hintText: 'Search associations',
           fillColor: Colors.white,
         ),
       ),
